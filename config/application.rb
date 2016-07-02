@@ -22,5 +22,15 @@ module FunkyShards
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.autoload_paths += %W[
+      #{Rails.root}/app/middleware
+    ]
+
+    # config.middleware.use ::AccountMiddleware
+
+    initializer "account_middleware" do |app|
+      app.middleware.use(ShardMiddleware)
+    end
   end
 end
